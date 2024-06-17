@@ -28,6 +28,7 @@ jobs:
         env:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
+          KEY: ${{ secrets.EC2_KEY }}
         run: |
           scp -o StrictHostKeyChecking=no -i $KEY -r ./* $USER@$HOST:/home/ec2-user/nestjs-app/
           ssh -o StrictHostKeyChecking=no -i $KEY $USER@$HOST << 'EOF'
