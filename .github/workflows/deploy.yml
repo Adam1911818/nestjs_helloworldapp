@@ -1,0 +1,39 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Deploy to EC2
+        env:
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+          KEY: ${{ secrets.EC2_KEY }}
+        run: |
+          scp -o StrictHostKeyChecking=no -i $KEY -r ./* $USER@$HOST:/home/ec2-user/nestjs-app/
+          ssh -o StrictHostKeyChecking=no -i $KEY $USER@$HOST << 'EOF'
+            cd /home/ec2-user/nestjs-app
+            npm install
+            pm2 restart nestjs-helloworld || pm2 start npm --name "nestjs-helloworld" -- start
+            pm2 save
+          EOF
