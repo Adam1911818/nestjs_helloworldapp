@@ -16,13 +16,24 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install 
 
       - name: Run build
-        run: npm run build
+        run: yarn run build
+
+      - name: Deploy to EC2
+        env:
+          EC2_SSH_KEY_ID: ${{ secrets.EC2_SSH }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+            yarn install
+            yarn run build
+            pm2 stop all || true
+            pm2 start yarn --name "your-app-name" -- start
+            pm2 save
 
  
       
