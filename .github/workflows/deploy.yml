@@ -43,5 +43,5 @@ jobs:
             git pull origin main  
             npm install
             npm run build
-            sudo systemctl restart nestjsapp.service
+            sudo systemctl restart nestjs_helloworldapp.service
             debug: true  # Enable verbose SSH output
