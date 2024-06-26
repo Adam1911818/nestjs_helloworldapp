@@ -44,3 +44,4 @@ jobs:
             npm install
             npm run build
             sudo systemctl restart your-app.service
+            debug: true  # Enable verbose SSH output
