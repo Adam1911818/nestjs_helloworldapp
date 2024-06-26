@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ec2-user/nestjs_helloworldapp / 
+            cd /home/ec2-user/nestjs_helloworldapp
             npm install
             npm run build
             sudo systemctl restart nestjsapp.service
